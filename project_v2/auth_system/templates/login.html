@@ -1,0 +1,27 @@
+<form method="post">
+    {% csrf_token %}
+    <label for="username">Username:</label>
+    <input type="text" name="username" id="username" required><br>
+
+    <label for="password">Password:</label>
+    <input type="password" name="password" id="password" required><br>
+
+    {% if error %}
+    <p style="color: red;">{{ error }}</p>
+    {% endif %}
+
+    <button type="submit">Login</button>
+</form>
+
+<p>
+    No Account?
+    <a href="{% url 'register' %}">Register</a>
+</p>
+
+{% load socialaccount %}
+
+<form method="post">
+    ...
+</form>
+
+<a href="{% provider_login_url 'google' %}">Enter via Google Account</a>

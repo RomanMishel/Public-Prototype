@@ -1,0 +1,17 @@
+<form method="post">
+    {% csrf_token %}
+    <label for="username">Username:</label>
+    <input type="text" name="username" id="username" required><br>
+
+    <label for="email">Email (optional):</label>
+    <input type="email" name="email" id="email"><br>
+
+    <label for="password">Password:</label>
+    <input type="password" name="password" id="password" required><br>
+
+    {% if error %}
+    <p style="color: red;">{{ error }}</p>
+    {% endif %}
+
+    <button type="submit">Register</button>
+</form>

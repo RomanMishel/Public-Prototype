@@ -1,0 +1,90 @@
+<html>
+    <body>
+        <h1>Chess Lobby</h1>
+        <p><a href="{% url 'profile' %}">Back to profile</a></p>
+        <p><a href="{% url 'logout' %}">Logout</a></p>
+        {% if user.is_staff %}
+        <p><a href="/admin/auth_system/gamelobby/">Open Admin Panel</a></p>
+        {% endif %}
+
+        {% if error %}
+        <p style="color: red;">{{ error }}</p>
+        {% endif %}
+
+        <h2>Create Lobby</h2>
+        <form method="get" action="{% url 'create_lobby' %}">
+            <button type="submit">Create Lobby</button>
+        </form>
+
+        {% if my_open_lobbies_count %}
+        <p>Your open lobbies waiting for an opponent: {{ my_open_lobbies_count }}</p>
+        {% endif %}
+
+        <h2>Open lobbies</h2>
+        <table border="1" cellpadding="6" cellspacing="0">
+            <tr>
+                <th>Game</th>
+                <th>Stake</th>
+                <th>Actions</th>
+            </tr>
+            {% for lobby in open_lobbies %}
+            <tr>
+                <td>{{ lobby.get_game_type_display }}</td>
+                <td>{{ lobby.stake_amount }}</td>
+                <td>
+                    <form method="post" action="{% url 'accept_lobby_invite' lobby.id %}" style="margin: 0;">
+                        {% csrf_token %}
+                        <button type="submit">Accept the match</button>
+                    </form>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3">No open lobbies yet</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <h2>My recent lobbies</h2>
+        <table border="1" cellpadding="6" cellspacing="0">
+            <tr>
+                <th>Created</th>
+                <th>Game</th>
+                <th>Stake</th>
+                <th>Opponent</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            {% for lobby in my_lobbies %}
+            <tr>
+                <td>{{ lobby.created_at|date:"Y-m-d H:i" }}</td>
+                <td>{{ lobby.get_game_type_display }}</td>
+                <td>{{ lobby.stake_amount }}</td>
+                <td>{% if lobby.guest %}{{ lobby.guest.chess_username }}{% else %}open{% endif %}</td>
+                <td>{{ lobby.get_status_display }}</td>
+                <td>
+                    {% if lobby.chess_game_url %}
+                        <a href="{{ lobby.chess_game_url }}" target="_blank" rel="noopener">Open game</a>
+                    {% elif lobby.status == "active" %}
+                        {% if lobby.host_id == current_player_id or lobby.guest_id == current_player_id %}
+                            <a href="https://www.chess.com/play/online" target="_blank" rel="noopener">
+                                Open Chess.com Play
+                            </a>
+                            <br>
+                            send/accept challenge manually on Chess.com
+                        {% else %}
+                            waiting...
+                        {% endif %}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6">You have not created lobbies yet</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </body>
+</html>

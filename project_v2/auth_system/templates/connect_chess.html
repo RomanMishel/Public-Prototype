@@ -1,0 +1,76 @@
+<html>
+    <body>
+        <h1>Connect Chess.com Profile</h1>
+        <p><a href="{% url 'profile' %}">Back to profile</a></p>
+        <p>
+            We auto-detect and save <code>chess_uuid</code>, <code>chess_cookie_header</code>,
+            and <code>chess_csrf_token</code> when Chess.com provides it.
+        </p>
+        <p>Your Chess.com password is used only for this request and is not stored.</p>
+
+        {% if error %}
+        <p style="color: red;">{{ error }}</p>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            <label for="connect_mode">Connection mode:</label>
+            <select id="connect_mode" name="connect_mode" onchange="togglePasswordField()">
+                <option value="password" {% if connect_mode != "interactive" %}selected{% endif %}>
+                    Password mode (fast)
+                </option>
+                <option value="interactive" {% if connect_mode == "interactive" %}selected{% endif %}>
+                    Google / manual mode
+                </option>
+            </select>
+            <br><br>
+
+            <label for="chess_username">Chess.com username:</label>
+            <input
+                type="text"
+                id="chess_username"
+                name="chess_username"
+                value="{{ chess_username|default:'' }}"
+                required
+            >
+            <br><br>
+
+            <div id="password_fields">
+                <label for="chess_password">Chess.com password:</label>
+                <input type="password" id="chess_password" name="chess_password">
+                <br><br>
+            </div>
+
+            <div id="interactive_hint" style="display: none;">
+                <p>
+                    Google/manual mode will open a browser window. Log in to Chess.com there,
+                    then wait until it opens Play Online page.
+                </p>
+            </div>
+
+            <button type="submit">Connect profile</button>
+        </form>
+
+        <script>
+            function togglePasswordField() {
+                const mode = document.getElementById("connect_mode").value;
+                const passwordFields = document.getElementById("password_fields");
+                const interactiveHint = document.getElementById("interactive_hint");
+                const passwordInput = document.getElementById("chess_password");
+
+                if (mode === "interactive") {
+                    passwordFields.style.display = "none";
+                    interactiveHint.style.display = "block";
+                    passwordInput.required = false;
+                    passwordInput.value = "";
+                } else {
+                    passwordFields.style.display = "block";
+                    interactiveHint.style.display = "none";
+                    passwordInput.required = true;
+                }
+            }
+
+            togglePasswordField();
+        </script>
+    </body>
+</html>

@@ -1,0 +1,31 @@
+<html>
+    <body>
+        <h1>Create Lobby</h1>
+        <p><a href="{% url 'lobby' %}">Back to lobby</a></p>
+        <p><a href="{% url 'logout' %}">Logout</a></p>
+
+        {% if error %}
+        <p style="color: red;">{{ error }}</p>
+        {% endif %}
+
+        <form method="post" action="{% url 'create_lobby' %}">
+            {% csrf_token %}
+            <label for="game_type">Game:</label>
+            <select name="game_type" id="game_type" required>
+                <option value="chess" {% if selected_game == "chess" %}selected{% endif %}>Chess</option>
+            </select>
+            <br>
+            <label for="stake_amount">Stake:</label>
+            <input
+                type="number"
+                name="stake_amount"
+                id="stake_amount"
+                min="1"
+                required
+                value="{{ stake_amount|default:1 }}"
+            >
+            <br>
+            <button type="submit">Create Lobby</button>
+        </form>
+    </body>
+</html>

@@ -1,0 +1,25 @@
+<html>
+    <body>
+        <h1>User Profile</h1>
+        <p>Welcome, {{ user.username }}!</p>
+        <p>Email: {{ user.email|default:"-" }}</p>
+        {% if chess_connected_now %}
+        <p style="color: green;">Chess.com profile connected successfully.</p>
+        {% endif %}
+        <p>Chess username: {{ chess_player.chess_username }}</p>
+        <p>
+            Chess integration status:
+            {% if chess_connected %}
+                connected
+            {% else %}
+                not connected
+            {% endif %}
+        </p>
+        <p><a href="{% url 'connect_chess_account' %}">Connect Chess.com Profile</a></p>
+        <p><a href="{% url 'lobby' %}">Open Chess Lobby</a></p>
+        {% if user.is_staff %}
+        <p><a href="/admin/">Open Admin Panel</a></p>
+        {% endif %}
+        <a href="{% url 'logout' %}">Logout</a>
+    </body>
+</html>
