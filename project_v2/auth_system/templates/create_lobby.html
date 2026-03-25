@@ -15,16 +15,6 @@
                 <option value="chess" {% if selected_game == "chess" %}selected{% endif %}>Chess</option>
             </select>
             <br>
-            <label for="stake_amount">Stake:</label>
-            <input
-                type="number"
-                name="stake_amount"
-                id="stake_amount"
-                min="1"
-                required
-                value="{{ stake_amount|default:1 }}"
-            >
-            <br>
             <button type="submit">Create Lobby</button>
         </form>
     </body>

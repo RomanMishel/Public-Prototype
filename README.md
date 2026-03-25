@@ -24,6 +24,16 @@ What is still experimental:
 - deep Chess.com integration that would automatically place both users into the same shared game;
 - browser-driven authentication flows, because they depend on third-party behavior outside this codebase.
 
+## Product Goal
+
+The goal of this prototype is simple:
+
+- user A creates a lobby;
+- user B accepts the lobby;
+- both users continue into the same Chess.com play flow as smoothly as possible.
+
+This public repository focuses on the lobby and coordination part of that experience.
+
 ## Tech Stack
 
 - Python
@@ -39,6 +49,17 @@ What is still experimental:
 - `project_v2/` - Django project configuration
 - `app/` - FastAPI utilities for PGN and match status helpers
 - `tests/` - unit tests for PGN parsing
+
+## What To Review First
+
+If you are opening this repository for a quick review, start here:
+
+- `project_v2/auth_system/views.py`
+- `project_v2/auth_system/models.py`
+- `project_v2/auth_system/templates/lobby.html`
+- `project_v2/auth_system/chess_integration.py`
+
+These files show the core lobby flow and current Chess.com integration direction.
 
 ## Local Run
 
@@ -86,3 +107,4 @@ python -m unittest tests.test_pgn_service -v
 - Local development uses `db.sqlite3`, which is not intended for publication.
 - Browser automation and third-party login behavior may change outside the control of this repository.
 - This repository is meant to demonstrate the project structure, current implementation, and direction of the platform.
+- Secrets, personal data, and local runtime files are intentionally excluded from this public prototype.

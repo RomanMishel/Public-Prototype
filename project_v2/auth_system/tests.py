@@ -23,14 +23,13 @@ class LobbyFlowTests(TestCase):
 
         create_response = self.client.post(
             reverse("create_lobby"),
-            data={"game_type": GameLobby.GameType.CHESS, "stake_amount": 50},
+            data={"game_type": GameLobby.GameType.CHESS},
         )
         self.assertEqual(create_response.status_code, 302)
 
         lobby = GameLobby.objects.get()
         self.assertEqual(lobby.status, GameLobby.Status.INVITED)
         self.assertEqual(lobby.game_type, GameLobby.GameType.CHESS)
-        self.assertEqual(lobby.stake_amount, 50)
         self.assertEqual(lobby.host.chess_username, "owner")
         self.assertIsNone(lobby.guest)
 
@@ -48,7 +47,7 @@ class LobbyFlowTests(TestCase):
     def test_user_cannot_accept_own_lobby(self):
         self.client.post(
             reverse("create_lobby"),
-            data={"game_type": GameLobby.GameType.CHESS, "stake_amount": 10},
+            data={"game_type": GameLobby.GameType.CHESS},
         )
         lobby = GameLobby.objects.get()
 
@@ -70,7 +69,7 @@ class LobbyFlowTests(TestCase):
     def test_second_user_cannot_accept_already_taken_lobby(self):
         self.client.post(
             reverse("create_lobby"),
-            data={"game_type": GameLobby.GameType.CHESS, "stake_amount": 15},
+            data={"game_type": GameLobby.GameType.CHESS},
         )
         lobby = GameLobby.objects.get()
 
@@ -92,7 +91,7 @@ class LobbyFlowTests(TestCase):
     def test_players_can_accept_each_others_lobbies(self):
         self.client.post(
             reverse("create_lobby"),
-            data={"game_type": GameLobby.GameType.CHESS, "stake_amount": 25},
+            data={"game_type": GameLobby.GameType.CHESS},
         )
         owner_lobby = GameLobby.objects.get(host__chess_username="owner")
 
@@ -100,7 +99,7 @@ class LobbyFlowTests(TestCase):
         self.client.login(username="challenger", password="pass12345")
         self.client.post(
             reverse("create_lobby"),
-            data={"game_type": GameLobby.GameType.CHESS, "stake_amount": 30},
+            data={"game_type": GameLobby.GameType.CHESS},
         )
         challenger_lobby = GameLobby.objects.get(host__chess_username="challenger")
 

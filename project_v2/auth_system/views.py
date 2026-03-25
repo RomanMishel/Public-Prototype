@@ -168,14 +168,13 @@ def create_lobby(request):
         return render(
             request,
             "create_lobby.html",
-            {"selected_game": GameLobby.GameType.CHESS, "stake_amount": 1},
+            {"selected_game": GameLobby.GameType.CHESS},
         )
 
     if request.method != "POST":
         return redirect("lobby")
 
     game_type = (request.POST.get("game_type") or "").strip().lower()
-    stake_amount_raw = (request.POST.get("stake_amount") or "").strip()
     valid_game_types = {choice for choice, _ in GameLobby.GameType.choices}
 
     if game_type not in valid_game_types:
@@ -185,31 +184,6 @@ def create_lobby(request):
             {
                 "error": "Select a valid game.",
                 "selected_game": GameLobby.GameType.CHESS,
-                "stake_amount": stake_amount_raw or 1,
-            },
-        )
-
-    try:
-        stake_amount = int(stake_amount_raw)
-    except ValueError:
-        return render(
-            request,
-            "create_lobby.html",
-            {
-                "error": "Stake must be a whole number.",
-                "selected_game": game_type,
-                "stake_amount": stake_amount_raw or 1,
-            },
-        )
-
-    if stake_amount < 1:
-        return render(
-            request,
-            "create_lobby.html",
-            {
-                "error": "Stake must be at least 1.",
-                "selected_game": game_type,
-                "stake_amount": stake_amount,
             },
         )
 
@@ -219,7 +193,6 @@ def create_lobby(request):
         guest=None,
         status=GameLobby.Status.INVITED,
         game_type=game_type,
-        stake_amount=stake_amount,
     )
     return redirect("lobby")
 

@@ -46,7 +46,6 @@ class GameLobbyAdmin(admin.ModelAdmin):
         "id",
         "short_code",
         "game_type",
-        "stake_amount",
         "host",
         "guest_or_open",
         "status",
@@ -68,7 +67,7 @@ class GameLobbyAdmin(admin.ModelAdmin):
     readonly_fields = ("code", "created_at", "updated_at", "started_at", "finished_at")
     ordering = ("-created_at",)
     fieldsets = (
-        ("Lobby", {"fields": ("code", "game_type", "stake_amount", "status")}),
+        ("Lobby", {"fields": ("code", "game_type", "status")}),
         ("Players", {"fields": ("host", "guest", "winner")}),
         ("Match", {"fields": ("chess_game_url",)}),
         ("Timeline", {"fields": ("created_at", "updated_at", "started_at", "finished_at")}),
