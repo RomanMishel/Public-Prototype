@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('auth_system', '0003_gamelobby_game_type_gamelobby_stake_amount_and_more'),
+        ('auth_system', '0003_gamelobby_game_type_and_size'),
     ]
 
     operations = [

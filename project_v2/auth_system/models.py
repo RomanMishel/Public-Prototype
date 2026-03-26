@@ -50,7 +50,7 @@ class GameLobby(models.Model):
 
     code = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
     game_type = models.CharField(max_length=16, choices=GameType.choices, default=GameType.CHESS)
-    stake_amount = models.PositiveIntegerField(default=1)
+    lobby_size = models.PositiveIntegerField(default=1)
     host = models.ForeignKey(
         ChessPlayer,
         on_delete=models.CASCADE,
@@ -89,8 +89,8 @@ class GameLobby(models.Model):
             raise ValidationError("Host and guest must be different players.")
         if self.winner_id and self.winner_id not in {self.host_id, self.guest_id}:
             raise ValidationError("Winner must be one of lobby players.")
-        if self.stake_amount < 1:
-            raise ValidationError("Stake must be at least 1.")
+        if self.lobby_size < 1:
+            raise ValidationError("Lobby size must be at least 1.")
         if self.status == self.Status.FINISHED and not self.finished_at:
             self.finished_at = timezone.now()
 
